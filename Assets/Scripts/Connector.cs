@@ -8,6 +8,8 @@ namespace LoppyEditor
     {
         #region Inspector members
 
+        public float lineEndMargin = 0.5f;
+
         public LineRenderer lineRenderer;
         public PolygonCollider2D collider;
 
@@ -47,6 +49,13 @@ namespace LoppyEditor
 
             // Detect deselection
             if (selected && Input.GetMouseButtonDown(0) && !mouseHover && !EditorManager.instance.isMouseOverUIObject()) onDeselect();
+
+            if (connected)
+            {
+                // Follow movement of nodes
+                lineRenderer.SetPosition(0, connectedNodeObjects[0].transform.position + (connectedNodeObjects[1].transform.position - connectedNodeObjects[0].transform.position).normalized * lineEndMargin);
+                lineRenderer.SetPosition(1, connectedNodeObjects[1].transform.position + (connectedNodeObjects[0].transform.position - connectedNodeObjects[1].transform.position).normalized * lineEndMargin);
+            }
         }
 
         private void FixedUpdate()
@@ -79,13 +88,6 @@ namespace LoppyEditor
                     }
                 }
                 if (destroy) return;
-
-                // Follow movement of nodes
-                if (lineRenderer.GetPosition(0) != connectedNodeObjects[0].transform.position || lineRenderer.GetPosition(1) != connectedNodeObjects[1].transform.position)
-                {
-                    lineRenderer.SetPosition(0, connectedNodeObjects[0].transform.position);
-                    lineRenderer.SetPosition(1, connectedNodeObjects[1].transform.position);
-                }
             }
         }
 
