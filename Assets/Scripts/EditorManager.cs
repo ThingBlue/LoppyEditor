@@ -139,10 +139,11 @@ namespace LoppyEditor
                 creatingConnector = false;
             }
 
-            // Handle node deletion
+            // Handle object deletion
             if (Input.GetKeyDown(KeyCode.Delete))
             {
                 List<GameObject> nodesToDestroy = new List<GameObject>();
+                List<GameObject> connectorsToDestroy = new List<GameObject>();
 
                 // Check if any nodes are selected
                 foreach (GameObject nodeObject in nodes)
@@ -153,6 +154,15 @@ namespace LoppyEditor
                         nodesToDestroy.Add(nodeObject);
                     }
                 }
+                // Check if any connectors are selected
+                foreach (GameObject connectorObject in connectors)
+                {
+                    Connector connector = connectorObject.GetComponent<Connector>();
+                    if (connector.selected || connector.connectedNodeObjects[0].GetComponent<EditorNode>().selected || connector.connectedNodeObjects[1].GetComponent<EditorNode>().selected)
+                    {
+                        connectorsToDestroy.Add(connectorObject);
+                    }
+                }
 
                 // Destroy and remove selected nodes
                 foreach (GameObject nodeToDestroy in nodesToDestroy)
@@ -161,6 +171,14 @@ namespace LoppyEditor
                     nodeToDestroy.GetComponent<EditorNode>().clearConnections();
                     nodes.Remove(nodeToDestroy);
                     Destroy(nodeToDestroy);
+                }
+                // Destroy and remove selected connectors
+                foreach (GameObject connectorToDestroy in connectorsToDestroy)
+                {
+                    // Make sure to remove connections
+                    connectorToDestroy.GetComponent<Connector>().clearConnections();
+                    connectors.Remove(connectorToDestroy);
+                    Destroy(connectorToDestroy);
                 }
             }
         }

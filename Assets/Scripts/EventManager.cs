@@ -24,6 +24,7 @@ namespace LoppyEditor
         #region Events
 
         public UnityEvent nodeSelectedEvent;
+        public UnityEvent connectorSelectedEvent;
 
         #endregion
 
@@ -38,6 +39,7 @@ namespace LoppyEditor
         {
             // Initialize events
             if (nodeSelectedEvent == null) nodeSelectedEvent = new UnityEvent();
+            if (connectorSelectedEvent == null) connectorSelectedEvent = new UnityEvent();
         }
     }
 }

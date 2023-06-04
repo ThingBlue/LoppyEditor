@@ -147,8 +147,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 2561687362390198598}
   meshCollider: {fileID: 5374599345818711883}
+  defaultColour: {r: 0, g: 0, b: 0, a: 1}
+  selectedColour: {r: 0.6497419, g: 0.74036, b: 0.8773585, a: 1}
+  hoverColour: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 1}
+  pressedColour: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
   connected: 0
   connectedNodeObjects: []
+  selected: 0
+  mouseHover: 0
 --- !u!64 &5374599345818711883
 MeshCollider:
   m_ObjectHideFlags: 0

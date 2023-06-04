@@ -11,15 +11,56 @@ namespace LoppyEditor
         public LineRenderer lineRenderer;
         public MeshCollider meshCollider;
 
+        public Color defaultColour;
+        public Color selectedColour;
+        public Color hoverColour;
+        public Color pressedColour;
+
         #endregion
 
         public bool connected = false;
         public List<GameObject> connectedNodeObjects;
 
+        private bool mouseDown = false;
+        public bool selected = false;
+        public bool mouseHover = false;
+
         public void addConnectedNode(GameObject node) { connectedNodeObjects.Add(node); }
+        public void clearConnections()
+        {
+            // Remove connections from connected nodes
+            connectedNodeObjects[0].GetComponent<EditorNode>().removeConnection(connectedNodeObjects[1].GetComponent<EditorNode>());
+            connectedNodeObjects[1].GetComponent<EditorNode>().removeConnection(connectedNodeObjects[0].GetComponent<EditorNode>());
+        }
+
+        private void Start()
+        {
+            // Subscribe to events
+            EventManager.instance.connectorSelectedEvent.AddListener(onConnectorSelected);
+        }
+
+        private void Update()
+        {
+            // Detect mouse up outside of element
+            if (Input.GetMouseButtonUp(0) && !mouseHover) mouseDown = false;
+
+            // Detect deselection
+            if (selected && Input.GetMouseButtonDown(0) && !mouseHover && !EditorManager.instance.isMouseOverUIObject()) onDeselect();
+        }
 
         private void FixedUpdate()
         {
+            // Set colour
+            Color colourToSet = defaultColour;
+
+            if (selected) colourToSet = selectedColour;
+            else if (mouseHover && mouseDown) colourToSet = pressedColour;
+            else if (mouseHover) colourToSet = hoverColour;
+            else colourToSet = defaultColour;
+
+            lineRenderer.startColor = colourToSet;
+            lineRenderer.endColor = colourToSet;
+
             if (connected)
             {
                 // Destroy connector if either of its connected nodes are destroyed
@@ -53,9 +94,53 @@ namespace LoppyEditor
             meshCollider.sharedMesh = lineBakedMesh;
         }
 
+        private void OnMouseEnter()
+        {
+            mouseHover = true;
+        }
+
+        private void OnMouseExit()
+        {
+            mouseHover = false;
+        }
+
         private void OnMouseDown()
         {
-            Debug.Log("LINE CLICKED");
+            mouseDown = true;
         }
+
+        private void OnMouseUp()
+        {
+            if (!selected && mouseDown && mouseHover) onSelect();
+        }
+
+        private void onSelect()
+        {
+            if (selected) return;
+
+            EventManager.instance.nodeSelectedEvent.Invoke();
+
+            mouseDown = false;
+            selected = true;
+        }
+
+        private void onDeselect()
+        {
+            if (!selected) return;
+
+            selected = false;
+        }
+
+        #region Event system callbacks
+
+        private void onConnectorSelected()
+        {
+            // Don't deselect when ctrl is held
+            if (Input.GetKey(KeyCode.LeftControl)) return;
+
+            onDeselect();
+        }
+
+        #endregion
     }
 }
