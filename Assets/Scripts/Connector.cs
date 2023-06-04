@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LoppyEditor
 {
-    public class EditorConnector : MonoBehaviour
+    public class Connector : MonoBehaviour
     {
         public bool connected = false;
         public List<GameObject> connectedNodeObjects;
@@ -20,6 +20,10 @@ namespace LoppyEditor
                 {
                     if (!nodeObject) Destroy(gameObject);
                 }
+
+                // Follow movement of nodes
+                GetComponent<LineRenderer>().SetPosition(0, connectedNodeObjects[0].transform.position);
+                GetComponent<LineRenderer>().SetPosition(1, connectedNodeObjects[1].transform.position);
             }
         }
     }

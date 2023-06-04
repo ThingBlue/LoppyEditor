@@ -17,9 +17,9 @@ using UnityEngine.Events;
 
 namespace LoppyEditor
 {
-    public class EditorEventManager : MonoBehaviour
+    public class EventManager : MonoBehaviour
     {
-        public static EditorEventManager instance;
+        public static EventManager instance;
 
         #region Events
 

@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1148754201
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
   m_Color: {r: 0.30391198, g: 0.4184066, b: 0.603, a: 1}
@@ -122,6 +122,12 @@ MonoBehaviour:
   pressedColour: {r: 0.94664997, g: 0.709, b: 1, a: 1}
   selectedColour: {r: 0.3508811, g: 0.7830189, b: 0.5925456, a: 1}
   disabledColour: {r: 0, g: 0, b: 0, a: 1}
+  nodeData:
+    name: 
+    region: 
+    type: 
+    entranceCount: 0
+    connections: []
   selected: 0
   mouseHover: 0
 --- !u!1 &1820886263577559905
@@ -316,8 +322,8 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: -1148754201
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &1820886264499982463

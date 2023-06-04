@@ -70,7 +70,7 @@ namespace LoppyEditor
         private void Start()
         {
             // Subscribe to events
-            EditorEventManager.instance.nodeSelectedEvent.AddListener(onNodeSelected);
+            EventManager.instance.nodeSelectedEvent.AddListener(onNodeSelected);
 
             nodeData = new EditorNodeData("New node", "", "", 0, new List<EditorNode>());
         }
@@ -126,7 +126,7 @@ namespace LoppyEditor
         {
             if (selected) return;
 
-            EditorEventManager.instance.nodeSelectedEvent.Invoke();
+            EventManager.instance.nodeSelectedEvent.Invoke();
 
             mouseDown = false;
             selected = true;

@@ -118,9 +118,9 @@ namespace LoppyEditor
                 if (onNode && !connectorStartNode.hasConnection(connectorEndNode))
                 {
                     // Create connector line
-                    newConnector.GetComponent<EditorConnector>().addConnectedNode(connectorStartNode.gameObject);
-                    newConnector.GetComponent<EditorConnector>().addConnectedNode(connectorEndNode.gameObject);
-                    newConnector.GetComponent<EditorConnector>().connected = true;
+                    newConnector.GetComponent<Connector>().addConnectedNode(connectorStartNode.gameObject);
+                    newConnector.GetComponent<Connector>().addConnectedNode(connectorEndNode.gameObject);
+                    newConnector.GetComponent<Connector>().connected = true;
 
                     newConnector.GetComponent<LineRenderer>().SetPosition(1, nodePosition);
                     connectors.Add(newConnector);

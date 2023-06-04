@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LoppyEditor
 {
-    public class EditorCameraController : MonoBehaviour
+    public class CameraController : MonoBehaviour
     {
         #region Inspector members
 
