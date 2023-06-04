@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -19,6 +21,8 @@ namespace LoppyEditor
 
         public float doubleClickMaxDelay = 0.5f;
         public float doubleClickMaxMouseMovement = 0.1f;
+
+        public string defaultSavePath = "";
 
         public GameObject massSelectionBox;
 
@@ -275,21 +279,31 @@ namespace LoppyEditor
         public void saveJson()
         {
             // Collect all node data
-            EditorNodeDataList saveData = new EditorNodeDataList();
-            saveData.data = new List<EditorNodeData>();
+            EditorNodeDataList dataList = new EditorNodeDataList();
+            dataList.data = new List<EditorNodeData>();
             foreach (GameObject node in nodes)
             {
-                saveData.data.Add(new EditorNodeData(node.GetComponent<EditorNode>().nodeData));
+                dataList.data.Add(new EditorNodeData(node.GetComponent<EditorNode>().nodeData));
             }
 
             // Convert to json
-            string jsonString = JsonUtility.ToJson(saveData);
+            string jsonString = JsonUtility.ToJson(dataList);
             Debug.Log(jsonString);
+
+            string path = EditorUtility.SaveFilePanel("Save as json", defaultSavePath, "newPattern", "json");
+            File.WriteAllText(path, jsonString);
         }
 
-        public void loadJson()
+        public void loadJson(string file)
         {
+            // Load json file
+            string path = EditorUtility.OpenFilePanel("Load json file", "", "json");
+            EditorNodeDataList dataList = new EditorNodeDataList();
+            dataList = JsonUtility.FromJson<EditorNodeDataList>(file);
 
+            // Create nodes
+
+            // Create connectors
         }
 
         #endregion
