@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
-namespace Loppy.Editor
+namespace LoppyEditor
 {
     public class EditorManager : MonoBehaviour
     {

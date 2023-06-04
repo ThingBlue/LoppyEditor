@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace Loppy.Editor
+namespace LoppyEditor
 {
     public class InspectorManager : MonoBehaviour
     {

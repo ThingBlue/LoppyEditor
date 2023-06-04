@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Loppy.Editor
+namespace LoppyEditor
 {
     public class PanelResizer : MonoBehaviour,
         IDragHandler

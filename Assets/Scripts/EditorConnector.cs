@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Loppy.Editor
+namespace LoppyEditor
 {
     public class EditorConnector : MonoBehaviour
     {

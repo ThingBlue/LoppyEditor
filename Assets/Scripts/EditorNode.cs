@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Loppy.Editor
+namespace LoppyEditor
 {
     [Serializable]
     public class EditorNodeData

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace Loppy.Editor
+namespace LoppyEditor
 {
     public class EditorCameraController : MonoBehaviour
     {

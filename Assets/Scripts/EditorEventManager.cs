@@ -15,7 +15,7 @@ using UnityEngine.Events;
  *         EventManager.instance.eventName.Invoke();
  */
 
-namespace Loppy.Editor
+namespace LoppyEditor
 {
     public class EditorEventManager : MonoBehaviour
     {
