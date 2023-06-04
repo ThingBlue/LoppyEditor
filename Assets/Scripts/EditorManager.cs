@@ -106,7 +106,7 @@ namespace LoppyEditor
                 foreach (GameObject nodeObject in nodes)
                 {
                     EditorNode node = nodeObject.GetComponent<EditorNode>();
-                    if (node.mouseHover)
+                    if (node.mouseHover && node != connectorStartNode)
                     {
                         onNode = true;
                         nodePosition = nodeObject.transform.position;
@@ -123,6 +123,7 @@ namespace LoppyEditor
                     newConnector.GetComponent<Connector>().connected = true;
 
                     newConnector.GetComponent<LineRenderer>().SetPosition(1, nodePosition);
+                    newConnector.GetComponent<Connector>().bakeMesh();
                     connectors.Add(newConnector);
                     newConnector = null;
 

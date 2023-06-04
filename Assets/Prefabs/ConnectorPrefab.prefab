@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2561687362390198601}
   - component: {fileID: 2561687362390198598}
   - component: {fileID: 4931227112298529041}
+  - component: {fileID: 5374599345818711883}
   m_Layer: 0
   m_Name: ConnectorPrefab
   m_TagString: Untagged
@@ -144,5 +145,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00c1dcd81fe146469ccfd6c2ba562b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 2561687362390198598}
+  meshCollider: {fileID: 5374599345818711883}
   connected: 0
   connectedNodeObjects: []
+--- !u!64 &5374599345818711883
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2561687362390198599}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
