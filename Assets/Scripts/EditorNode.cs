@@ -45,9 +45,10 @@ namespace LoppyEditor
 
         public EditorNodeData nodeData;
 
-        public bool selected;
-        private bool mouseDown;
-        public bool mouseHover;
+        public bool selected = false;
+        private bool mouseDown = false;
+        public bool mouseHover = false;
+        public bool massSelectHover = false;
 
         public void setNodeData(EditorNodeData newNodeData) { nodeData = newNodeData; }
         public void setName(string name) { nodeData.name = name; }
@@ -89,7 +90,7 @@ namespace LoppyEditor
             // Set colour
             if (selected) sprite.color = selectedColour;
             else if (mouseHover && mouseDown) sprite.color = pressedColour;
-            else if (mouseHover) sprite.color = hoverColour;
+            else if (mouseHover || massSelectHover) sprite.color = hoverColour;
             else sprite.color = defaultColour;
         }
 
@@ -141,6 +142,15 @@ namespace LoppyEditor
 
             selected = false;
             if (InspectorManager.instance.currentNode == this) InspectorManager.instance.resetCurrentNode();
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.collider.tag == "MassSelectionBox") massSelectHover = true;
+        }
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.collider.tag == "MassSelectionBox") massSelectHover = false;
         }
 
         #region Event system callbacks

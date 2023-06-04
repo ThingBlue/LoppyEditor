@@ -13,6 +13,9 @@ namespace LoppyEditor
         #region Inspector members
 
         public float doubleClickMaxDelay = 0.5f;
+        public float doubleClickMaxMouseMovement = 0.1f;
+
+        public GameObject massSelectionBox;
 
         public GameObject nodePrefab;
         public GameObject connectorPrefab;
@@ -23,11 +26,15 @@ namespace LoppyEditor
         public List<GameObject> connectors;
 
         private bool singleClick;
+        private Vector3 singleClickPosition;
         private float doubleClickTimer;
 
         private bool creatingConnector;
         public GameObject newConnector;
         private EditorNode connectorStartNode = null;
+
+        public bool massSelecting = false;
+        private Vector2 massSelectOrigin = Vector2.zero;
 
         private void Awake()
         {
@@ -41,6 +48,9 @@ namespace LoppyEditor
             // Initialize storage lists
             nodes = new List<GameObject>();
             connectors = new List<GameObject>();
+
+            // Deactivate selection box
+            massSelectionBox.SetActive(false);
         }
 
         private void Update()
@@ -53,14 +63,29 @@ namespace LoppyEditor
                 doubleClickTimer = 0;
             }
 
+            // Mouse moved too much during double click, cancel node creation
+            if (singleClick && (Camera.main.ScreenToWorldPoint(Input.mousePosition) - singleClickPosition).magnitude > doubleClickMaxMouseMovement)
+            {
+                singleClick = false;
+                doubleClickTimer = 0;
+            }
+
             // Handle node creation
             if (Input.GetMouseButtonDown(0) && !isMouseOverUIObject())
             {
+                // First click
                 if (!singleClick)
                 {
+                    // Start double click timer
                     singleClick = true;
+                    singleClickPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     doubleClickTimer = 0;
+
+                    // Set selection origin
+                    massSelecting = true;
+                    massSelectOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 }
+                // Second click
                 else if (singleClick && doubleClickTimer < doubleClickMaxDelay)
                 {
                     // Create new node
@@ -71,6 +96,44 @@ namespace LoppyEditor
                     singleClick = false;
                     doubleClickTimer = 0;
                 }
+            }
+
+            // Handle mass selection
+            if (massSelecting && Input.GetMouseButtonUp(0))
+            {
+                massSelecting = false;
+
+                // Select everything in the box
+                foreach (GameObject nodeObject in nodes)
+                {
+                    if (nodeObject.GetComponent<EditorNode>().massSelectHover)
+                    {
+                        nodeObject.GetComponent<EditorNode>().selected = true;
+                    }
+                }
+                foreach (GameObject connectorObject in connectors)
+                {
+                    if (connectorObject.GetComponent<Connector>().massSelectHover)
+                    {
+                        connectorObject.GetComponent<Connector>().selected = true;
+                    }
+                }
+            }
+            if (massSelecting)
+            {
+                massSelectionBox.SetActive(true);
+
+                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 boxPosition = massSelectOrigin + (mousePosition - massSelectOrigin) / 2;
+                massSelectionBox.transform.position = boxPosition;
+
+                Vector3 boxScale = mousePosition - massSelectOrigin;
+                boxScale.z = 1;
+                massSelectionBox.transform.localScale = boxScale;
+            }
+            else
+            {
+                massSelectionBox.SetActive(false);
             }
 
             // Handle node connecting
@@ -123,7 +186,6 @@ namespace LoppyEditor
                     newConnector.GetComponent<Connector>().connected = true;
 
                     newConnector.GetComponent<LineRenderer>().SetPosition(1, nodePosition);
-                    newConnector.GetComponent<Connector>().bakeMesh();
                     connectors.Add(newConnector);
                     newConnector = null;
 
