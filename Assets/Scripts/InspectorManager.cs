@@ -19,7 +19,7 @@ namespace LoppyEditor
 
         #endregion
 
-        private EditorNode currentNode = null;
+        public EditorNode currentNode = null;
 
         private void Awake()
         {

@@ -70,7 +70,7 @@ namespace LoppyEditor
         private void Start()
         {
             // Subscribe to events
-            EventManager.instance.nodeSelectedEvent.AddListener(onNodeSelected);
+            EventManager.instance.objectSelectedEvent.AddListener(onObjectSelected);
 
             nodeData = new EditorNodeData("New node", "", "", 0, new List<EditorNode>());
         }
@@ -126,7 +126,7 @@ namespace LoppyEditor
         {
             if (selected) return;
 
-            EventManager.instance.nodeSelectedEvent.Invoke();
+            EventManager.instance.objectSelectedEvent.Invoke();
 
             mouseDown = false;
             selected = true;
@@ -140,12 +140,12 @@ namespace LoppyEditor
             if (!selected) return;
 
             selected = false;
-            InspectorManager.instance.resetCurrentNode();
+            if (InspectorManager.instance.currentNode == this) InspectorManager.instance.resetCurrentNode();
         }
 
         #region Event system callbacks
 
-        private void onNodeSelected()
+        private void onObjectSelected()
         {
             // Don't deselect when ctrl is held
             if (Input.GetKey(KeyCode.LeftControl)) return;

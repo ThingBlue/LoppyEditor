@@ -19,8 +19,8 @@ namespace LoppyEditor
 
         #endregion
 
-        private List<GameObject> nodes;
-        private List<GameObject> connectors;
+        public List<GameObject> nodes;
+        public List<GameObject> connectors;
 
         private bool singleClick;
         private float doubleClickTimer;
@@ -185,6 +185,17 @@ namespace LoppyEditor
 
         public bool isMouseOverUIObject()
         {
+            // Check for nodes and connectors
+            foreach (GameObject nodeObject in nodes)
+            {
+                if (nodeObject.GetComponent<EditorNode>().mouseHover) return true;
+            }
+            foreach (GameObject connectorObject in connectors)
+            {
+                if (connectorObject.GetComponent<Connector>().mouseHover) return true;
+            }
+
+            // Check for UI
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
             eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
             List<RaycastResult> results = new List<RaycastResult>();

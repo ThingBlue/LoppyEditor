@@ -36,7 +36,7 @@ namespace LoppyEditor
         private void Start()
         {
             // Subscribe to events
-            EventManager.instance.connectorSelectedEvent.AddListener(onConnectorSelected);
+            EventManager.instance.objectSelectedEvent.AddListener(onObjectSelected);
         }
 
         private void Update()
@@ -111,14 +111,23 @@ namespace LoppyEditor
 
         private void OnMouseUp()
         {
-            if (!selected && mouseDown && mouseHover) onSelect();
+            if (!selected && mouseDown && mouseHover)
+            {
+                // Check that mouse is not over and nodes
+                foreach (GameObject node in EditorManager.instance.nodes)
+                {
+                    if (node.GetComponent<EditorNode>().mouseHover) return;
+                }
+
+                onSelect();
+            }
         }
 
         private void onSelect()
         {
             if (selected) return;
 
-            EventManager.instance.nodeSelectedEvent.Invoke();
+            EventManager.instance.objectSelectedEvent.Invoke();
 
             mouseDown = false;
             selected = true;
@@ -133,7 +142,7 @@ namespace LoppyEditor
 
         #region Event system callbacks
 
-        private void onConnectorSelected()
+        private void onObjectSelected()
         {
             // Don't deselect when ctrl is held
             if (Input.GetKey(KeyCode.LeftControl)) return;
