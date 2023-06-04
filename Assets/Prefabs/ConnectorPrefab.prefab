@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineEndMargin: 0.5
   lineRenderer: {fileID: 2561687362390198598}
-  collider: {fileID: -1274343569648560645}
+  polygonCollider: {fileID: -1274343569648560645}
   defaultColour: {r: 0, g: 0, b: 0, a: 1}
   selectedColour: {r: 0.6497419, g: 0.74036, b: 0.8773585, a: 1}
   hoverColour: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 1}

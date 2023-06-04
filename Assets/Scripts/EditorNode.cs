@@ -11,19 +11,34 @@ namespace LoppyEditor
     [Serializable]
     public class EditorNodeData
     {
+        public int id;
         public string name;
         public string region;
         public string type;
         public int entranceCount;
-        public List<EditorNode> connections;
+        public List<int> connections;
+        public Vector2 editorPosition;
 
-        public EditorNodeData(string name, string region, string type, int entranceCount, List<EditorNode> connections)
+        public EditorNodeData(int id, string name, string region, string type, int entranceCount, List<int> connections, Vector2 editorPosition)
         {
+            this.id = id;
             this.name = name;
             this.region = region;
             this.type = type;
             this.entranceCount = entranceCount;
             this.connections = connections;
+            this.editorPosition = editorPosition;
+        }
+
+        public EditorNodeData(EditorNodeData other)
+        {
+            this.id = other.id;
+            this.name = other.name;
+            this.region = other.region;
+            this.type = other.type;
+            this.entranceCount = other.entranceCount;
+            this.connections = other.connections;
+            this.editorPosition = other.editorPosition;
         }
     }
 
@@ -44,6 +59,7 @@ namespace LoppyEditor
         #endregion
 
         public EditorNodeData nodeData;
+        public List<EditorNode> connectedNodes;
 
         public bool selected = false;
         private bool mouseDown = false;
@@ -55,29 +71,43 @@ namespace LoppyEditor
         public void setRegion(string region) { nodeData.region = region; }
         public void setType(string type) { nodeData.type = type; }
         public void setEntranceCount(int entranceCount) { nodeData.entranceCount = entranceCount; }
-        public void addConnection(EditorNode other) { nodeData.connections.Add(other); }
-        public void removeConnection(EditorNode other) { nodeData.connections.Remove(other); }
+        public void addConnection(EditorNode other)
+        {
+            connectedNodes.Add(other);
+            nodeData.connections.Add(other.nodeData.id);
+        }
+        public void removeConnection(EditorNode other)
+        {
+            connectedNodes.Remove(other);
+            nodeData.connections.Remove(other.nodeData.id);
+        }
         public void clearConnections()
         {
             // Remove connections on to this node from other nodes
-            foreach (EditorNode other in nodeData.connections)
+            foreach (EditorNode other in connectedNodes)
             {
                 other.removeConnection(this);
             }
+            connectedNodes.Clear();
+
+            // Clear connection data
             nodeData.connections.Clear();
         }
-        public bool hasConnection(EditorNode other) { return nodeData.connections.Contains(other); }
+        public bool hasConnection(EditorNode other) { return connectedNodes.Contains(other); }
 
         private void Start()
         {
             // Subscribe to events
             EventManager.instance.objectSelectedEvent.AddListener(onObjectSelected);
 
-            nodeData = new EditorNodeData("New node", "", "", 0, new List<EditorNode>());
+            nodeData = new EditorNodeData(gameObject.GetInstanceID(), "New node", "", "", 0, new List<int>(), Vector2.zero);
         }
 
         private void Update()
         {
+            // Set editor position
+            nodeData.editorPosition = transform.position;
+
             // Detect mouse up outside of element
             if (Input.GetMouseButtonUp(0) && !mouseHover) mouseDown = false;
 

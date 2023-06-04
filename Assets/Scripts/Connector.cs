@@ -11,7 +11,7 @@ namespace LoppyEditor
         public float lineEndMargin = 0.5f;
 
         public LineRenderer lineRenderer;
-        public PolygonCollider2D collider;
+        public PolygonCollider2D polygonCollider;
 
         public Color defaultColour;
         public Color selectedColour;
@@ -75,7 +75,7 @@ namespace LoppyEditor
             {
                 // Update collider
                 List<Vector2> colliderPoints = calculateColliderPoints();
-                collider.SetPath(0, colliderPoints.ConvertAll(point => (Vector2)transform.InverseTransformPoint(point)));
+                polygonCollider.SetPath(0, colliderPoints.ConvertAll(point => (Vector2)transform.InverseTransformPoint(point)));
 
                 // Destroy connector if either of its connected nodes are destroyed
                 bool destroy = false;

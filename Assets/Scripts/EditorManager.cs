@@ -6,6 +6,11 @@ using UnityEngine.UIElements;
 
 namespace LoppyEditor
 {
+    public class EditorNodeDataList
+    {
+        public List<EditorNodeData> data;
+    }
+
     public class EditorManager : MonoBehaviour
     {
         public static EditorManager instance;
@@ -264,5 +269,29 @@ namespace LoppyEditor
             EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
             return results.Count > 0;
         }
+
+        #region Saving and loading
+
+        public void saveJson()
+        {
+            // Collect all node data
+            EditorNodeDataList saveData = new EditorNodeDataList();
+            saveData.data = new List<EditorNodeData>();
+            foreach (GameObject node in nodes)
+            {
+                saveData.data.Add(new EditorNodeData(node.GetComponent<EditorNode>().nodeData));
+            }
+
+            // Convert to json
+            string jsonString = JsonUtility.ToJson(saveData);
+            Debug.Log(jsonString);
+        }
+
+        public void loadJson()
+        {
+
+        }
+
+        #endregion
     }
 }
