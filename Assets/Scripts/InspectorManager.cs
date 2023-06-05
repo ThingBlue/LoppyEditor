@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace LoppyEditor
 {
@@ -15,6 +16,7 @@ namespace LoppyEditor
         public TMP_InputField nameInputField;
         public TMP_InputField regionInputField;
         public TMP_InputField typeInputField;
+        public Toggle terminalToggle;
         public TMP_InputField entranceCountInputField;
 
         #endregion
@@ -38,6 +40,7 @@ namespace LoppyEditor
             nameInputField.text = currentNode.nodeData.name;
             regionInputField.text = currentNode.nodeData.region;
             typeInputField.text = currentNode.nodeData.type;
+            terminalToggle.isOn = currentNode.nodeData.terminal;
             entranceCountInputField.text = currentNode.nodeData.entranceCount.ToString();
         }
 
@@ -65,6 +68,7 @@ namespace LoppyEditor
             currentNode.nodeData.name = nameInputField.text;
             currentNode.nodeData.region = regionInputField.text;
             currentNode.nodeData.type = typeInputField.text;
+            currentNode.nodeData.terminal = terminalToggle.isOn;
             currentNode.nodeData.entranceCount = int.Parse(entranceCountInputField.text);
 
             // Update node and inspector to reflect changes

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,16 +16,18 @@ namespace LoppyEditor
         public string name;
         public string region;
         public string type;
+        public bool terminal;
         public int entranceCount;
         public List<int> connections;
         public Vector2 editorPosition;
 
-        public EditorNodeData(int id, string name, string region, string type, int entranceCount, List<int> connections, Vector2 editorPosition)
+        public EditorNodeData(int id, string name, string region, string type, bool terminal, int entranceCount, List<int> connections, Vector2 editorPosition)
         {
             this.id = id;
             this.name = name;
             this.region = region;
             this.type = type;
+            this.terminal = terminal;
             this.entranceCount = entranceCount;
             this.connections = connections;
             this.editorPosition = editorPosition;
@@ -36,6 +39,7 @@ namespace LoppyEditor
             this.name = other.name;
             this.region = other.region;
             this.type = other.type;
+            this.terminal = other.terminal;
             this.entranceCount = other.entranceCount;
             this.connections = other.connections;
             this.editorPosition = other.editorPosition;
@@ -97,7 +101,7 @@ namespace LoppyEditor
 
         public void initializeNodeData()
         {
-            nodeData = new EditorNodeData(gameObject.GetInstanceID(), "New node", "", "", 0, new List<int>(), Vector2.zero);
+            nodeData = new EditorNodeData(gameObject.GetInstanceID(), "New node", "", "", true, 0, new List<int>(), Vector2.zero);
         }
 
         private void Start()
