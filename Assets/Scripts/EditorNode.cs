@@ -74,7 +74,7 @@ namespace LoppyEditor
         public void addConnection(EditorNode other)
         {
             connectedNodes.Add(other);
-            nodeData.connections.Add(other.nodeData.id);
+            if (!nodeData.connections.Contains(other.nodeData.id)) nodeData.connections.Add(other.nodeData.id);
         }
         public void removeConnection(EditorNode other)
         {
@@ -95,12 +95,15 @@ namespace LoppyEditor
         }
         public bool hasConnection(EditorNode other) { return connectedNodes.Contains(other); }
 
+        public void initializeNodeData()
+        {
+            nodeData = new EditorNodeData(gameObject.GetInstanceID(), "New node", "", "", 0, new List<int>(), Vector2.zero);
+        }
+
         private void Start()
         {
             // Subscribe to events
             EventManager.instance.objectSelectedEvent.AddListener(onObjectSelected);
-
-            nodeData = new EditorNodeData(gameObject.GetInstanceID(), "New node", "", "", 0, new List<int>(), Vector2.zero);
         }
 
         private void Update()
@@ -122,6 +125,9 @@ namespace LoppyEditor
             else if (mouseHover && mouseDown) sprite.color = pressedColour;
             else if (mouseHover || massSelectHover) sprite.color = hoverColour;
             else sprite.color = defaultColour;
+
+            // Set displat text
+            nameText.text = nodeData.name;
         }
 
         private void OnMouseDown()

@@ -100,6 +100,7 @@ namespace LoppyEditor
                     // Create new node
                     GameObject newNodeObject = Instantiate(nodePrefab, Camera.main.ScreenToWorldPoint(Input.mousePosition), Quaternion.identity);
                     newNodeObject.transform.position = new Vector3(newNodeObject.transform.position.x, newNodeObject.transform.position.y, 0);
+                    newNodeObject.GetComponent<EditorNode>().initializeNodeData();
                     nodes.Add(newNodeObject);
 
                     singleClick = false;
@@ -274,6 +275,14 @@ namespace LoppyEditor
             return results.Count > 0;
         }
 
+        private void clearBoard()
+        {
+            foreach (GameObject nodeObject in nodes) Destroy(nodeObject);
+            foreach (GameObject connectorObject in connectors) Destroy(connectorObject);
+            nodes.Clear();
+            connectors.Clear();
+        }
+
         #region Saving and loading
 
         public void saveJson()
@@ -294,16 +303,61 @@ namespace LoppyEditor
             File.WriteAllText(path, jsonString);
         }
 
-        public void loadJson(string file)
+        public void loadJson()
         {
+            // Clear current board
+            clearBoard();
+
             // Load json file
             string path = EditorUtility.OpenFilePanel("Load json file", "", "json");
+            string jsonString = File.ReadAllText(path);
             EditorNodeDataList dataList = new EditorNodeDataList();
-            dataList = JsonUtility.FromJson<EditorNodeDataList>(file);
+            dataList = JsonUtility.FromJson<EditorNodeDataList>(jsonString);
+
+            Debug.Log(jsonString);
 
             // Create nodes
+            foreach (EditorNodeData nodeData in dataList.data)
+            {
+                GameObject newNodeObject = Instantiate(nodePrefab);
+                newNodeObject.GetComponent<EditorNode>().nodeData = new EditorNodeData(nodeData);
+                newNodeObject.transform.position = nodeData.editorPosition;
+                nodes.Add(newNodeObject);
+            }
 
             // Create connectors
+            foreach (GameObject nodeObject in nodes)
+            {
+                EditorNode node = nodeObject.GetComponent<EditorNode>();
+
+                // Loop through all connections
+                foreach (int connection in nodeObject.GetComponent<EditorNode>().nodeData.connections)
+                {
+                    // Find new object specified by connection
+                    foreach (GameObject otherNodeObject in nodes)
+                    {
+                        EditorNode otherNode = otherNodeObject.GetComponent<EditorNode>();
+                        if (otherNode.nodeData.id == connection)
+                        {
+                            // Check if the connection has alreacy been established
+                            if (node.connectedNodes.Contains(otherNode)) break;
+
+                            // Connection found
+                            node.addConnection(otherNode);
+                            otherNode.addConnection(node);
+
+                            // Create connector object
+                            GameObject newConnectorObject = Instantiate(connectorPrefab);
+                            newConnectorObject.GetComponent<Connector>().addConnectedNode(nodeObject);
+                            newConnectorObject.GetComponent<Connector>().addConnectedNode(otherNodeObject);
+                            newConnectorObject.GetComponent<LineRenderer>().SetPosition(0, nodeObject.transform.position);
+                            newConnectorObject.GetComponent<LineRenderer>().SetPosition(1, otherNodeObject.transform.position);
+                            newConnectorObject.GetComponent<Connector>().connected = true;
+                            connectors.Add(newConnectorObject);
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

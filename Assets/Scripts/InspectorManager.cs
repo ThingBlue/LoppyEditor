@@ -35,8 +35,6 @@ namespace LoppyEditor
 
         public void displayNodeData()
         {
-            currentNode.nameText.text = currentNode.nodeData.name;
-
             nameInputField.text = currentNode.nodeData.name;
             regionInputField.text = currentNode.nodeData.region;
             typeInputField.text = currentNode.nodeData.type;
