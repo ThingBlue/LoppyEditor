@@ -51,6 +51,9 @@ namespace LoppyEditor
             // Singleton
             if (instance == null) instance = this;
             else Destroy(this);
+
+            // Format screen
+            Screen.fullScreenMode = FullScreenMode.Windowed;
         }
 
         private void Start()
@@ -306,6 +309,11 @@ namespace LoppyEditor
                 new ExtensionFilter("All Files", "*" ),
             };
             string path = StandaloneFileBrowser.SaveFilePanel("Save as json", defaultSavePath, "newPattern.json", extensions);
+
+            // Check if file opening was cancelled
+            if (path == "") return;
+
+            // Write to file
             File.WriteAllText(path, jsonString);
         }
 
@@ -320,7 +328,11 @@ namespace LoppyEditor
                 new ExtensionFilter("All Files", "*" ),
             };
             string[] paths = StandaloneFileBrowser.OpenFilePanel("Open json", "", extensions, false);
-            //string path = EditorUtility.OpenFilePanel("Load json file", "", "json");
+
+            // Check if file opening was cancelled
+            if (paths.Length == 0) return;
+
+            // Read files
             string jsonString = File.ReadAllText(paths[0]);
             EditorNodeDataList dataList = new EditorNodeDataList();
             dataList = JsonUtility.FromJson<EditorNodeDataList>(jsonString);
