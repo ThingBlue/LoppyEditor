@@ -319,9 +319,6 @@ namespace LoppyEditor
 
         public void loadJson()
         {
-            // Clear current board
-            clearBoard();
-
             // Load json file
             ExtensionFilter[] extensions = new[] {
                 new ExtensionFilter("Json files", "json"),
@@ -331,6 +328,9 @@ namespace LoppyEditor
 
             // Check if file opening was cancelled
             if (paths.Length == 0) return;
+
+            // Clear current board
+            clearBoard();
 
             // Read files
             string jsonString = File.ReadAllText(paths[0]);
