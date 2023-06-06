@@ -4037,6 +4037,7 @@ MonoBehaviour:
   terminalToggle: {fileID: 374776350}
   entranceCountInputField: {fileID: 2057333566}
   currentNode: {fileID: 0}
+  triggerUICallbacks: 1
 --- !u!1 &1688157630
 GameObject:
   m_ObjectHideFlags: 0

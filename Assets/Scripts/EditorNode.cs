@@ -181,7 +181,10 @@ namespace LoppyEditor
             if (!selected) return;
 
             selected = false;
-            if (InspectorManager.instance.currentNode == this) InspectorManager.instance.resetCurrentNode();
+            if (InspectorManager.instance.currentNode == this)
+            {
+                InspectorManager.instance.resetCurrentNode();
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

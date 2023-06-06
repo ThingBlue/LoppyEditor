@@ -22,6 +22,7 @@ namespace LoppyEditor
         #endregion
 
         public EditorNode currentNode = null;
+        public bool triggerUICallbacks = true;
 
         private void Awake()
         {
@@ -50,13 +51,15 @@ namespace LoppyEditor
 
             // Open inspector
             inspectorPanel.SetActive(true);
+            triggerUICallbacks = false;
             displayNodeData();
+            triggerUICallbacks = true;
         }
 
         public void resetCurrentNode()
         {
             // Apply whatever is in the inspector before closing it
-            setNodeData();
+            //setNodeData();
 
             // Close inspector
             currentNode = null;
@@ -65,6 +68,9 @@ namespace LoppyEditor
 
         public void setNodeData()
         {
+            // Why do I have to do this
+            if (!triggerUICallbacks) return;
+
             currentNode.nodeData.name = nameInputField.text;
             currentNode.nodeData.region = regionInputField.text;
             currentNode.nodeData.type = typeInputField.text;
