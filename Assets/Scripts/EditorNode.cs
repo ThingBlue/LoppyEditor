@@ -10,7 +10,7 @@ using UnityEngine.UI;
 namespace LoppyEditor
 {
     [Serializable]
-    public class EditorNodeData
+    public class NodeData
     {
         public int id;
         public string name;
@@ -21,7 +21,7 @@ namespace LoppyEditor
         public List<int> connections;
         public Vector2 editorPosition;
 
-        public EditorNodeData(int id, string name, string region, string type, bool terminal, int entranceCount, List<int> connections, Vector2 editorPosition)
+        public NodeData(int id, string name, string region, string type, bool terminal, int entranceCount, List<int> connections, Vector2 editorPosition)
         {
             this.id = id;
             this.name = name;
@@ -33,7 +33,7 @@ namespace LoppyEditor
             this.editorPosition = editorPosition;
         }
 
-        public EditorNodeData(EditorNodeData other)
+        public NodeData(NodeData other)
         {
             this.id = other.id;
             this.name = other.name;
@@ -62,7 +62,7 @@ namespace LoppyEditor
 
         #endregion
 
-        public EditorNodeData nodeData;
+        public NodeData nodeData;
         public List<EditorNode> connectedNodes;
 
         public bool selected = false;
@@ -70,7 +70,7 @@ namespace LoppyEditor
         public bool mouseHover = false;
         public bool massSelectHover = false;
 
-        public void setNodeData(EditorNodeData newNodeData) { nodeData = newNodeData; }
+        public void setNodeData(NodeData newNodeData) { nodeData = newNodeData; }
         public void setName(string name) { nodeData.name = name; }
         public void setRegion(string region) { nodeData.region = region; }
         public void setType(string type) { nodeData.type = type; }
@@ -101,7 +101,7 @@ namespace LoppyEditor
 
         public void initializeNodeData()
         {
-            nodeData = new EditorNodeData(gameObject.GetInstanceID(), "New node", "", "", true, 0, new List<int>(), Vector2.zero);
+            nodeData = new NodeData(gameObject.GetInstanceID(), "New node", "", "", true, 0, new List<int>(), Vector2.zero);
         }
 
         private void Start()

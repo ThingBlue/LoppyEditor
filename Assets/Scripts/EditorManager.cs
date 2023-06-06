@@ -1,17 +1,22 @@
 using SFB;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace LoppyEditor
 {
-    public class EditorNodeDataList
+    [Serializable]
+    public class PatternData
     {
-        public List<EditorNodeData> data;
+        public string name;
+        public List<NodeData> data;
     }
 
     public class EditorManager : MonoBehaviour
@@ -29,6 +34,8 @@ namespace LoppyEditor
 
         public GameObject nodePrefab;
         public GameObject connectorPrefab;
+
+        public TMP_InputField patternNameInputField;
 
         #endregion
 
@@ -292,15 +299,16 @@ namespace LoppyEditor
         public void saveJson()
         {
             // Collect all node data
-            EditorNodeDataList dataList = new EditorNodeDataList();
-            dataList.data = new List<EditorNodeData>();
+            PatternData newPatternData = new PatternData();
+            newPatternData.data = new List<NodeData>();
+            newPatternData.name = patternNameInputField.text;
             foreach (GameObject node in nodes)
             {
-                dataList.data.Add(new EditorNodeData(node.GetComponent<EditorNode>().nodeData));
+                newPatternData.data.Add(new NodeData(node.GetComponent<EditorNode>().nodeData));
             }
 
             // Convert to json
-            string jsonString = JsonUtility.ToJson(dataList);
+            string jsonString = JsonUtility.ToJson(newPatternData);
             Debug.Log(jsonString);
 
             //string path = EditorUtility.SaveFilePanel("Save as json", defaultSavePath, "newPattern", "json");
@@ -332,18 +340,21 @@ namespace LoppyEditor
             // Clear current board
             clearBoard();
 
-            // Read files
+            // Read file
             string jsonString = File.ReadAllText(paths[0]);
-            EditorNodeDataList dataList = new EditorNodeDataList();
-            dataList = JsonUtility.FromJson<EditorNodeDataList>(jsonString);
+            PatternData newPatternData = new PatternData();
+            newPatternData = JsonUtility.FromJson<PatternData>(jsonString);
 
-            Debug.Log(jsonString);
+            Debug.Log("Read json data: " + jsonString);
+
+            // Update pattern name
+            patternNameInputField.text = newPatternData.name;
 
             // Create nodes
-            foreach (EditorNodeData nodeData in dataList.data)
+            foreach (NodeData nodeData in newPatternData.data)
             {
                 GameObject newNodeObject = Instantiate(nodePrefab);
-                newNodeObject.GetComponent<EditorNode>().nodeData = new EditorNodeData(nodeData);
+                newNodeObject.GetComponent<EditorNode>().nodeData = new NodeData(nodeData);
                 newNodeObject.transform.position = nodeData.editorPosition;
                 nodes.Add(newNodeObject);
             }
