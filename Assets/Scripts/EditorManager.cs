@@ -1,3 +1,4 @@
+using SFB;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -299,7 +300,12 @@ namespace LoppyEditor
             string jsonString = JsonUtility.ToJson(dataList);
             Debug.Log(jsonString);
 
-            string path = EditorUtility.SaveFilePanel("Save as json", defaultSavePath, "newPattern", "json");
+            //string path = EditorUtility.SaveFilePanel("Save as json", defaultSavePath, "newPattern", "json");
+            ExtensionFilter[] extensions = new[] {
+                new ExtensionFilter("Json files", "json"),
+                new ExtensionFilter("All Files", "*" ),
+            };
+            string path = StandaloneFileBrowser.SaveFilePanel("Save as json", defaultSavePath, "newPattern.json", extensions);
             File.WriteAllText(path, jsonString);
         }
 
@@ -309,8 +315,13 @@ namespace LoppyEditor
             clearBoard();
 
             // Load json file
-            string path = EditorUtility.OpenFilePanel("Load json file", "", "json");
-            string jsonString = File.ReadAllText(path);
+            ExtensionFilter[] extensions = new[] {
+                new ExtensionFilter("Json files", "json"),
+                new ExtensionFilter("All Files", "*" ),
+            };
+            string[] paths = StandaloneFileBrowser.OpenFilePanel("Open json", "", extensions, false);
+            //string path = EditorUtility.OpenFilePanel("Load json file", "", "json");
+            string jsonString = File.ReadAllText(paths[0]);
             EditorNodeDataList dataList = new EditorNodeDataList();
             dataList = JsonUtility.FromJson<EditorNodeDataList>(jsonString);
 
