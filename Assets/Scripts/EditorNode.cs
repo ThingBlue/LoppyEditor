@@ -29,7 +29,7 @@ namespace LoppyEditor
             this.type = type;
             this.terminal = terminal;
             this.entranceCount = entranceCount;
-            this.connections = connections;
+            this.connections = new List<int>(connections);
             this.editorPosition = editorPosition;
         }
 
@@ -41,7 +41,7 @@ namespace LoppyEditor
             this.type = other.type;
             this.terminal = other.terminal;
             this.entranceCount = other.entranceCount;
-            this.connections = other.connections;
+            this.connections = new List<int>(other.connections);
             this.editorPosition = other.editorPosition;
         }
     }
